@@ -12,6 +12,10 @@ app.get('/', ( req, res ) => {
     res.json('Hello word');
 });
 
+app.get('/usuario', ( req, res ) => {
+    res.json('get Usuario');
+});
+
 app.post('/usuario', ( req, res ) => {
     let data = {body: req.body};
 
