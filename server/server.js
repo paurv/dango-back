@@ -1,33 +1,18 @@
 require('./config/config');
 
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
+const user = require('./routes/user');
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', ( req, res ) => {
-    res.json('Hello word');
-});
+app.use( user );
 
-app.get('/usuario', ( req, res ) => {
-    res.json('get Usuario');
-});
-
-app.post('/usuario', ( req, res ) => {
-    let data = {body: req.body};
-
-    if ( data.body.nombre === undefined ) {
-        res.status(400).json({
-            ok: false,
-            mensaje: 'El nombre es necesario.'
-        })
-    }
-    res.send({persona: data.body});
-});
-
+mongoose.connect('mongodb://localhost:27017/dango', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.listen(process.env.PORT, () => {
     console.log('Escuchando puerto : ', process.env.PORT);
