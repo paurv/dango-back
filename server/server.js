@@ -4,16 +4,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
-const user = require('./routes/user');
+
+const routers = require('./routes/index');
 
 // middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use( user );
+app.use(routers)
 
 mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.listen(process.env.PORT, () => {
-    console.log('Escuchando puerto : ', process.env.PORT);
+    console.log('Listening port : ', process.env.PORT);
 });
