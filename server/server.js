@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 app.use( user );
 
-mongoose.connect('mongodb://localhost:27017/dango', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.listen(process.env.PORT, () => {
     console.log('Escuchando puerto : ', process.env.PORT);

@@ -1,11 +1,30 @@
 
 const express = require('express');
+const bcrypt = require('bcrypt');
+const _ = require('underscore');
 const User = require('../models/user');
 const app = express();
 
+app.get('/user', ( req, res ) => {
+    
+    User.find()
+        .exec()
+        .then( users => {        // response.password = null;
+            User.countDocuments(( err, quantity ) => {
+                res.json({
+                    ok: true,
+                    users,
+                    quantity
+                });
+                res.end();
+            });
+        }).catch( err => {
+            return res.status(400).json({
+                ok: false,
+                message: err
+            });
+        });
 
-app.get('/', ( req, res ) => {
-    res.json('Hello word');
 });
 
 app.post('/user', ( req, res ) => {
@@ -13,12 +32,12 @@ app.post('/user', ( req, res ) => {
     let user = new User({
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync( body.password, 10 ),
         role: body.role
     });
     user.save()
-        .then( response => {
-            res.json({
+    .then( response => {        // response.password = null;
+        res.json({
                 ok: true,
                 user: response
             });
@@ -26,26 +45,52 @@ app.post('/user', ( req, res ) => {
         }).catch( err => {
             return res.status(400).json({
                 ok: false,
-                mensaje: err
+                message: err
             });
         });
 
 });
 
-// app.get('/user', ( req, res ) => {
-//     res.json('get user local');
-// });
+app.put('/user/:id', ( req, res ) => {
+    let id = req.params.id;
+    let data = _.pick( req.body, ['name', 'email', 'role'] );
 
-// app.post('/user', ( req, res ) => {
-//     let data = {body: req.body};
+    User.findByIdAndUpdate( id, data, { new: true, runValidators: true })
+    .then( resp => {
+        res.json({
+            ok: true,
+            user: resp
+        })
+    })
+    .catch( err => {
+        res.status(400).json({
+            ok: false,
+            message: err
+        })
+    });
+});
 
-//     if ( data.body.nombre === undefined ) {
-//         res.status(400).json({
-//             ok: false,
-//             mensaje: 'El nombre es necesario.'
-//         })
-//     }
-//     res.send({persona: data.body});
-// });
+app.delete('/user/:id', ( req, res ) => {
+    let id =  req.params.id;
+    User.findByIdAndRemove( id )
+        .then( deletedUser => {
+            if ( !deletedUser ) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {message: 'User not found'}
+                });                
+            }
+            res.json({
+                status: true,
+                deletedUser
+            });
+        })
+        .catch( err => {
+            res.status(400).json({
+                ok: false,
+                message: err
+            });
+        });
+});
 
 module.exports = app;
