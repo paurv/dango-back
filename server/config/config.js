@@ -11,6 +11,17 @@ process.env.PORT = process.env.PORT || 8888;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 //======================================
+//  Vencimiento del token
+//======================================
+// 60sec * 60min * 24hr = 1DAY
+process.env.EXP_TOKEN = 60 * 60 * 24 * 15;
+
+//======================================
+//  Semilla de auth
+//======================================
+process.env.SEED = process.env.SEED || 'este-es-el-seed-desarrollo';
+
+//======================================
 //  DB
 //======================================
 let urlDB;
