@@ -4,6 +4,6 @@ const app = express();
 
 // routers
 app.use( '/user', require('./user') );
-app.use( '/login', require('./login') );
+app.use( '/auth', require('./auth') );
 
 module.exports = app;
