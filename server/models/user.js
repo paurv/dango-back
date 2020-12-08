@@ -28,13 +28,14 @@ let userSchema = new Schema(
             type: String,
             trim: true,
             enum: validRoles
+        },
+        plan: {
+            type: String,
+            trim: true,
+            // type: {type: mongoose.ObjectId, ref: "usuarios", require: true},
+            // ref: "plan",
+            required: false
         }
-        // ,
-        // plan: {
-        //     type: {type: mongoose.ObjectId, ref: "usuarios", require: true},
-        //     ref: "plan",
-        //     required: false
-        // }
     },
     {
         versionKey: false

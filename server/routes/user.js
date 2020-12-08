@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
 const { verifyToken, verifyAdmin_Role } = require('../middlewares/auth');
+const { response } = require('express');
 const app = express();
 
 app.get('/', verifyToken, ( req, res ) => {
@@ -35,19 +36,18 @@ app.post('/', [verifyToken, verifyAdmin_Role], ( req, res ) => {
         role: body.role
     });
     user.save()
-    .then( response => {        // response.password = null;
-        res.json({
-                ok: true,
-                user: response
-            });
-            res.end();
+        .then( response => {        // response.password = null;
+            res.json({
+                    ok: true,
+                    user: response
+                });
+                // res.end();
         }).catch( err => {
             return res.status(400).json({
                 ok: false,
                 message: err
             });
         });
-
 });
 
 app.put('/:id', [verifyToken, verifyAdmin_Role], ( req, res ) => {
