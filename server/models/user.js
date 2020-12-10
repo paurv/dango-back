@@ -24,7 +24,7 @@ let userSchema = new Schema(
             required: [true, 'Password is necessary'],
             trim: true
         },
-        role: { // tipo usuario
+        role: {
             type: String,
             trim: true,
             enum: validRoles
@@ -32,8 +32,6 @@ let userSchema = new Schema(
         plan: {
             type: String,
             trim: true,
-            // type: {type: mongoose.ObjectId, ref: "usuarios", require: true},
-            // ref: "plan",
             required: false
         }
     },
@@ -50,6 +48,6 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-userSchema.plugin( uniqueValidator, { message: '{PATH} must be unique' } );  
+userSchema.plugin( uniqueValidator, { message: '{PATH} debe ser unico' } );  
 
 module.exports = mongoose.model('User', userSchema);

@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
 const { verifyToken, verifyAdmin_Role } = require('../middlewares/auth');
-const { response } = require('express');
 const app = express();
 
 app.get('/', verifyToken, ( req, res ) => {
@@ -17,7 +16,6 @@ app.get('/', verifyToken, ( req, res ) => {
                     users,
                     quantity
                 });
-                // res.end();
             });
         }).catch( err => {
             return res.status(400).json({
@@ -41,7 +39,6 @@ app.post('/', [verifyToken, verifyAdmin_Role], ( req, res ) => {
                     ok: true,
                     user: response
                 });
-                // res.end();
         }).catch( err => {
             return res.status(400).json({
                 ok: false,
@@ -76,7 +73,7 @@ app.delete('/:id', [verifyToken, verifyAdmin_Role], ( req, res ) => {
             if ( !deletedUser ) {
                 return res.status(400).json({
                     ok: false,
-                    err: {message: 'User not found'}
+                    err: {message: 'Usuario no encontrado'}
                 });                
             }
             res.json({

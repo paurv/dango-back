@@ -14,13 +14,13 @@ app.post('/login', ( req, res ) => {
             if ( !userDB ) {
                 return res.status(400).json({
                     ok: false,
-                    message: "Wrong user or password"
+                    message: "Clave o usuario equivocado"
                 });
             }
             if ( !bcrypt.compareSync(data.password, userDB.password) ) {
                 return res.status(400).json({
                     ok: false,
-                    message: "Wrong user or password"
+                    message: "Clave o usuario equivocado"
                 });
             }
             let token = jwt.sign(   // generate payload
