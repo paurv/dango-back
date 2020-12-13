@@ -14,7 +14,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 //  Vencimiento del token
 //======================================
 // 60sec * 60min * 24hr = 1DAY
-process.env.EXP_TOKEN = 60 * 60 * 24 * 15;
+process.env.EXP_TOKEN = 60 * 60 * 24 * 20;
 
 //======================================
 //  Semilla de auth

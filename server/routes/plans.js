@@ -3,6 +3,7 @@ const express = require('express');
 const Plan = require('../models/plans');
 const _ = require('underscore');
 const { verifyAdmin_Role, verifyToken } = require('../middlewares/auth');
+const { json } = require('body-parser');
 const app = express();
 
 // Obtener Planes
@@ -20,6 +21,22 @@ app.get('/', ( req, res ) => {
                 message: err
             });
         });
+});
+
+//obtener Plan especifico
+app.get('/:idPlan', ( req, res ) => {
+    Plan.findById(req.params.idPlan)
+        .then( resp => {
+            res.json({
+                ok: true,
+                resp
+            });
+        }).catch( err => {
+            res.status(400).json({
+                ok: false,
+                err
+            })
+        })
 });
 
 // Agregrar planes

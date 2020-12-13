@@ -6,9 +6,27 @@ const User = require('../models/user');
 const { verifyToken, verifyAdmin_Role } = require('../middlewares/auth');
 const app = express();
 
+// obtener un solo usuario
+app.get('/userid', verifyToken, ( req, res ) => {
+    User.findById( req.user._id )
+        .exec()
+        .then( user => {
+            res.json({
+                ok: true,
+                user
+            });
+        }).catch( err => {
+            res.status(400).json({
+                ok: false,
+                err
+            });
+        });
+});
+
+// Obtener todos los usuarios
 app.get('/', verifyToken, ( req, res ) => {
     User.find()
-        .exec()
+        .populate('plan', {})
         .then( users => {        // response.password = null;
             User.countDocuments(( err, quantity ) => {
                 res.json({
@@ -25,6 +43,7 @@ app.get('/', verifyToken, ( req, res ) => {
         });
 });
 
+// Crear usuario como administrador
 app.post('/', [verifyToken, verifyAdmin_Role], ( req, res ) => {
     let body = req.body;
     let user = new User({
@@ -47,6 +66,7 @@ app.post('/', [verifyToken, verifyAdmin_Role], ( req, res ) => {
         });
 });
 
+// Modificar usuairo como administrador
 app.put('/:id', [verifyToken, verifyAdmin_Role], ( req, res ) => {
     let id = req.params.id;
     let data = _.pick( req.body, ['name', 'email', 'role'] );
@@ -66,6 +86,7 @@ app.put('/:id', [verifyToken, verifyAdmin_Role], ( req, res ) => {
     });
 });
 
+// Eliminar usuario como administrador
 app.delete('/:id', [verifyToken, verifyAdmin_Role], ( req, res ) => {
     let id =  req.params.id;
     User.findByIdAndRemove( id )

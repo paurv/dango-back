@@ -27,13 +27,10 @@ let userSchema = new Schema(
         role: {
             type: String,
             trim: true,
+            default: 'Empresa',
             enum: validRoles
         },
-        plan: {
-            type: String,
-            trim: true,
-            required: false
-        }
+        plan: { type: mongoose.ObjectId, ref: "Plans", required: false }
     },
     {
         versionKey: false
