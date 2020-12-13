@@ -7,7 +7,6 @@ let storeSchema = new Schema(
         owner: { type: mongoose.ObjectId, ref: "User", required: true, unique: true },
         name: { type: String, trim: true, required: true },
         storeUrl: { type: String, required: true, trim: true, unique: true },
-        plan: { type: mongoose.ObjectId, ref: "Plans", required: true },
         blocked: { type: Boolean, default: false },
         site: {
             description: { type: String, trim: true },
@@ -16,9 +15,9 @@ let storeSchema = new Schema(
             pathFavicon: { type: String, trim: true }
         },
         header: {
-            title: String,
-            subtitle: String,
-            backgroundUrl: String
+            title: {type: String, default: ""},
+            subtitle: {type: String, default: ""},
+            backgroundUrl: {type: String, default: ""}
         },
         footer: {
             email: String,

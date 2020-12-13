@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const user = require('../models/user');
 const app = express();
 
 app.post('/login', ( req, res ) => {
@@ -48,7 +49,7 @@ app.post('/register', ( req, res ) => {
         name: body.name,
         email: body.email,
         password: bcrypt.hashSync( body.password, 10 ),
-        role: "Empresa",
+        role: body.role,
         plan: body.plan
     });
     user.save()
@@ -69,6 +70,35 @@ app.post('/register', ( req, res ) => {
                 message: err
             });
         })
+});
+
+// verificar si correo ya existe
+app.put('/', ( req, res ) => {
+    const body = req.body;
+    const filter = { email: body.email };
+
+    User.findOne( filter )
+        .exec()
+        .then( resp => {
+            if ( resp ) {
+                res.json({
+                    ok: false,
+                    message: `Lo sentimos este email ya fue registrado con otro usuario`,
+                    resp
+                });                
+            } else {
+                res.json({
+                    ok: true,
+                    message: `Usuario correcto`,
+                    resp
+                });
+            }
+        }).then( err => {
+            res.status(400).json({
+                ok: false,
+                err
+            })
+        });
 });
 
 module.exports = app;

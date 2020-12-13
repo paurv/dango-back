@@ -4,9 +4,20 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let mediaSchema = new Schema(
     {
-        name: String,
-        path: String,
-        type: String
+        owner: { 
+            type: mongoose.ObjectId,
+            ref: "User",
+            required: true,
+            unique: true
+        },
+        media: {
+            name: String,
+            path: String,
+            type: String
+        }
+    },
+    {
+        versionKey: false
     }
 );
 

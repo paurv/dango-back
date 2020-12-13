@@ -27,14 +27,30 @@ app.get('/', ( req, res) => {
         });
 });
 
+// Obtener tienda Usuario
+app.get('/user', verifyToken, ( req, res ) => {
+    const filter =  {owner: req.user._id};
+    Stores.findOne( filter )
+            .then( storeUser => {
+                res.json({
+                    ok: true,
+                    storeUser
+                });
+            }).catch( err => {
+                res.status(400).json({
+                    ok: false,
+                    err
+                });
+            });
+});
+
 // Crear tiendas
 app.post('/', [urlParser, verifyToken, verifyCompany_Role], (req, res) => {
     const body = req.body;
     const store = new Stores({
         owner: req.user._id,
         name: body.name,
-        storeUrl: body.storeUrl,
-        plan: body.plan
+        storeUrl: body.storeUrl
     });
     store.save()
         .then( resp => {
@@ -85,6 +101,52 @@ app.put('/:idStore', [verifyToken, verifyAdmin_Role], ( req, res ) => {
             })
         })
 });
+
+// actualizar header
+app.put('/', [verifyToken], (req, res) => {
+    const filter = {owner: req.user._id};
+    const data = req.body;
+    // const update = {
+    //     "header.title": data.title,
+    //     "header.subtitle": data.subtitle,
+    //     "header.backgroundUrl": data.backgroundUrlg
+    // };
+    Stores.findOneAndUpdate( filter, data, { new: true, runValidators: true } )
+            .then( updatedStore => {
+                res.json({
+                    ok: true,
+                    updatedStore
+                });
+            }).catch( err => {
+                res.status(400).json({
+                    ok: false,
+                    err
+                });
+            });
+});
+
+// actualizar footer
+// app.put('/', verifyToken, (req, res) => {
+//     console.log('entro');
+//     const filter = {owner: req.user._id};
+//     const data = req.body;
+//     const update = {
+//             "footer.email": data.email,
+//             "footer.tel": data.tel
+//         }
+//     Stores.findOneAndUpdate( filter, update, { new: true, runValidators: true } )
+//             .then( updatedFooter => {
+//                 res.json({
+//                     ok: true,
+//                     updatedFooter
+//                 });
+//             }).catch( err => {
+//                 res.status(400).json({
+//                     ok: false,
+//                     err
+//                 });
+//             });
+// });
 
 // PAGINAS
 // Crear paginas 
@@ -141,6 +203,12 @@ app.put('/:idStore/page/:idPage', [verifyToken], ( req, res ) => {
         });
 });
 
+// agregar codigo
+// app.put('/:idStore/pageEdition/:idPage', verifyToken, ( req, res ) => {
+//     const filter = { _id: req.params.idStore, 'pages._id': req.params.idPage };
+//     const update = { pages: { } }
+// });
+
 // Obtener Paginas x Usuario
 app.get('/:idStore/pages', [verifyToken], ( req, res ) => {
     Stores.find()
@@ -157,19 +225,6 @@ app.get('/:idStore/pages', [verifyToken], ( req, res ) => {
             });
         });
 });
-
-// Actualizar Paginas: Editar codigo <----------------------
-
-//========================== Media ==========================
-// Crear media
-// Eliminar media
-// Editar media
-
-//========================== Producto ==========================
-// Agregar producto
-// Eliminar producto
-// Editar producto
-
 
 
 

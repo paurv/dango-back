@@ -2,10 +2,17 @@
 const express = require('express');
 const app = express();
 
+const userRouter = require('./user');
+const authRouter = require('./auth');
+const plansRouter = require('./plans');
+const storesRouter = require('./stores');
+const mediaRouter = require('./media');
+
 // routers
-app.use( '/user', require('./user') );
-app.use( '/auth', require('./auth') );
-app.use( '/plans', require('./plans') );
-app.use( '/stores', require('./stores') );
+app.use( '/user', userRouter );
+app.use( '/auth', authRouter );
+app.use( '/plans', plansRouter );
+app.use( '/stores', storesRouter );
+app.use( '/media', mediaRouter );
 
 module.exports = app;
