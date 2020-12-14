@@ -33,7 +33,7 @@ let storeSchema = new Schema(
             codeBlock: {
                 js: String,
                 css: String,
-                htmlBlocks: [{ html: String }]
+                htmlBlocks: Array
             }
         }],
     },

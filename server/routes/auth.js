@@ -2,11 +2,10 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const user = require('../models/user');
+// const user = require('../models/user');
 const app = express();
 
 app.post('/login', ( req, res ) => {
-    
     let data = req.body;
     let condition = { email: data.email };
 
