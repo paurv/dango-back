@@ -106,11 +106,6 @@ app.put('/:idStore', [verifyToken, verifyAdmin_Role], ( req, res ) => {
 app.put('/', [verifyToken], (req, res) => {
     const filter = {owner: req.user._id};
     const data = req.body;
-    // const update = {
-    //     "header.title": data.title,
-    //     "header.subtitle": data.subtitle,
-    //     "header.backgroundUrl": data.backgroundUrlg
-    // };
     Stores.findOneAndUpdate( filter, data, { new: true, runValidators: true } )
             .then( updatedStore => {
                 res.json({
@@ -204,10 +199,42 @@ app.put('/:idStore/page/:idPage', [verifyToken], ( req, res ) => {
 });
 
 // agregar codigo
-// app.put('/:idStore/pageEdition/:idPage', verifyToken, ( req, res ) => {
-//     const filter = { _id: req.params.idStore, 'pages._id': req.params.idPage };
-//     const update = { pages: { } }
-// });
+app.put('/:idStore/pageEdition/:idPage', verifyToken, ( req, res ) => {
+    console.log(req);
+    const conditions = { _id: req.params.idStore, 'pages._id': req.params.idPage };
+    const update = { $set: { "pages.$.codeBlock": req.body } };
+
+    Stores.findOneAndUpdate( conditions, update, { new: true, runValidators: true } )
+        .then( updatesPages => {
+            res.json({
+                ok: true,
+                updatesPages
+            });
+        }).catch( err => {
+            res.status(400).json({
+                ok: false,
+                err
+            });
+        });
+});
+
+app.put('/:idStore/pageCssJs/:idPage', verifyToken, ( req, res ) => {
+    const conditions = { _id: req.params.idStore, 'pages._id': req.params.idPage };
+    const update = { pages: { $set: {codeBlock: req.body}  } };
+
+    Stores.findByIdAndUpdate( conditions, update, { new: true, runValidators: true } )
+        .then( updatesPages => {
+            res.json({
+                ok: true,
+                updatesPages
+            });
+        }).catch( err => {
+            res.status(400).json({
+                ok: false,
+                err
+            });
+        });
+});
 
 // Obtener Paginas x Usuario
 app.get('/:idStore/pages', [verifyToken], ( req, res ) => {

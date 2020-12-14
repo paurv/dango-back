@@ -3,7 +3,6 @@ const express = require('express');
 const Plan = require('../models/plans');
 const _ = require('underscore');
 const { verifyAdmin_Role, verifyToken } = require('../middlewares/auth');
-const { json } = require('body-parser');
 const app = express();
 
 // Obtener Planes
