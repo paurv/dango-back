@@ -6,7 +6,7 @@ let productSchema = new Schema(
     {
         user:        { type: mongoose.ObjectId, ref: 'User' },
         products: [{
-            category:    { type: mongoose.ObjectId, ref: "Category" },
+            category:    { type: String },
             name:        { type: String },
             stock:       { type: Number },
             price:       { type: Number },
